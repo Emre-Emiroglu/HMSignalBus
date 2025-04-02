@@ -1,101 +1,84 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
-using UnityEngine;
+using System.Linq;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 
 namespace CodeCatGames.HSignalBus.Runtime
 {
     public sealed class SignalSubscription
     {
         #region ReadonlyFields
-        private readonly List<Delegate> _receivers = new();
-        private readonly ReaderWriterLockSlim _lock = new();
         private readonly Type _type;
-        private readonly SignalSyncType _syncType;
-        private readonly SignalStyleType _styleType;
-        #endregion
-        
-        #region Getters
-        public Type Type => _type;
-        public SignalSyncType SyncType => _syncType;
-        public SignalStyleType StyleType => _styleType;
+        private readonly SignalMode _signalMode;
+        private readonly SignalType _signalType;
+        private readonly List<Delegate> _receivers = new();
+        private readonly List<Func<object, Task>> _asyncTaskReceivers = new();
+        private readonly List<Func<object, UniTask>> _asyncUniTaskReceivers = new();
         #endregion
 
-        #region Constructor
-        public SignalSubscription(Type type, SignalSyncType syncType = SignalSyncType.Synchronous,
-            SignalStyleType styleType = SignalStyleType.Normal)
+        #region Getters
+        public Type Type => _type;
+        public SignalMode SignalMode => _signalMode;
+        public SignalType SignalType => _signalType;
+        public bool HasReceivers() => _receivers.Count > 0;
+        public bool HasAsyncTaskReceivers() => _asyncTaskReceivers.Count > 0;
+        public bool HasAsyncUniTaskReceivers() => _asyncUniTaskReceivers.Count > 0;
+        #endregion
+        
+        #region Constructors
+        public SignalSubscription(Type type, SignalMode signalMode, SignalType signalType)
         {
             _type = type;
-            _syncType = syncType;
-            _styleType = styleType;
+            _signalMode = signalMode;
+            _signalType = signalType;
         }
         #endregion
 
         #region Executes
-        public void Add(Delegate handler)
+        public void Add(Delegate receiver)
         {
-            _lock.EnterWriteLock();
-            try
+            switch (receiver)
             {
-                _receivers.Add(handler);
-            }
-            finally
-            {
-                _lock.ExitWriteLock();
+                case Func<object, Task> asyncTaskReceiver:
+                    _asyncTaskReceivers.Add(asyncTaskReceiver);
+                    break;
+                case Func<object, UniTask> asyncUniTaskReceiver:
+                    _asyncUniTaskReceivers.Add(asyncUniTaskReceiver);
+                    break;
+                default:
+                    _receivers.Add(receiver);
+                    break;
             }
         }
-        public void Remove(Delegate handler)
+        public void Remove(Delegate receiver)
         {
-            _lock.EnterWriteLock();
-            try
+            switch (receiver)
             {
-                _receivers.Remove(handler);
-            }
-            finally
-            {
-                _lock.ExitWriteLock();
+                case Func<object, Task> asyncTaskReceiver:
+                    _asyncTaskReceivers.Remove(asyncTaskReceiver);
+                    break;
+                case Func<object, UniTask> asyncUniTaskReceiver:
+                    _asyncUniTaskReceivers.Remove(asyncUniTaskReceiver);
+                    break;
+                default:
+                    _receivers.Remove(receiver);
+                    break;
             }
         }
-        public void Invoke(object signal)
+        public void InvokeSyncNormal(object signal) => _receivers.ForEach(receiver => receiver.DynamicInvoke(signal));
+        public async Task InvokeAsyncTask(object signal)
         {
-            Delegate[] handlersCopy;
-            _lock.EnterReadLock();
-            try
-            {
-                handlersCopy = _receivers.ToArray();
-            }
-            finally
-            {
-                _lock.ExitReadLock();
-            }
+            List<Task> tasks = _asyncTaskReceivers.Select(asyncTaskHandler => asyncTaskHandler.Invoke(signal)).ToList();
 
-            foreach (Delegate handler in handlersCopy)
-            {
-                try
-                {
-                    handler.DynamicInvoke(signal);
-                }
-                catch (Exception ex) when (ex.InnerException != null)
-                {
-                    Debug.LogError(ex.InnerException);
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogError(ex);
-                }
-            }
+            await Task.WhenAll(tasks);
         }
-        public bool HasHandlers()
+        public async UniTask InvokeAsyncUniTask(object signal)
         {
-            _lock.EnterReadLock();
-            try
-            {
-                return _receivers.Count > 0;
-            }
-            finally
-            {
-                _lock.ExitReadLock();
-            }
+            List<UniTask> tasks = Enumerable
+                .Select(_asyncUniTaskReceivers, asyncUniTaskHandler => asyncUniTaskHandler.Invoke(signal)).ToList();
+
+            await UniTask.WhenAll(tasks);
         }
         #endregion
     }

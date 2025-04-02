@@ -1,14 +1,14 @@
 ﻿namespace CodeCatGames.HSignalBus.Runtime
 {
-    public enum SignalSyncType
+    public enum SignalMode
     {
         Synchronous,
-        AsynchronousTask,
-        AsynchronousUniTask
+        Asynchronous,
     }
-    public enum SignalStyleType
+    public enum SignalType
     {
         Normal,
-        Reactive
+        Task,
+        UniTask
     }
 }
