@@ -1,0 +1,18 @@
+{
+    "name": "CodeCatGames.HSignalBus.Editor",
+    "rootNamespace": "CodeCatGames.HSignalBus.Editor",
+    "references": [
+        "GUID:3fa07eb9c2295c74b9fc77f02b4effb7"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

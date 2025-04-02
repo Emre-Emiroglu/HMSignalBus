@@ -1,0 +1,14 @@
+{
+    "name": "CodeCatGames.HSignalBus.Runtime",
+    "rootNamespace": "CodeCatGames.HSignalBus.Runtime",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
