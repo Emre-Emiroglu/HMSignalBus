@@ -12,25 +12,25 @@ namespace CodeCatGames.HSignalBus.Runtime
         #endregion
         
         #region Executes
-        public void Subscribe<TSignal>(Action<TSignal> receiver)
+        public void Subscribe<TSignal>(Action<TSignal> receiver, int priority = 0)
         {
             Type type = typeof(TSignal);
 
             if (!_subscriptions.TryGetValue(type, out SignalSubscription subscription))
                 ThrowNotDeclaredException(type);
             else
-                subscription.Add(receiver);
+                subscription.Add(receiver, priority);
         }
-        public void Unsubscribe<TSignal>(Action<TSignal> receiver)
+        public void Unsubscribe<TSignal>(Action<TSignal> receiver, int priority = 0)
         {
             Type type = typeof(TSignal);
 
             if (!_subscriptions.TryGetValue(type, out SignalSubscription subscription))
                 ThrowNotDeclaredException(type);
             else
-                subscription.Remove(receiver);
+                subscription.Remove(receiver, priority);
         }
-        public void DeclareSignal<TSignal>(SignalType signalType =  SignalType.Normal)
+        public void DeclareSignal<TSignal>(SignalType signalType = SignalType.Normal)
         {
             Type type = typeof(TSignal);
 
