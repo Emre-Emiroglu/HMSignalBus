@@ -51,7 +51,7 @@ namespace CodeCatGames.HMSignalBus.Runtime
         {
             foreach (KeyValuePair<int, List<Delegate>> receivers in _receivers.OrderByDescending(kvp => kvp.Key))
                 foreach (Delegate receiver in receivers.Value)
-                    ((Action<object>)receiver)(signal);
+                   receiver.DynamicInvoke(signal);
         }
 
         /// <summary>
