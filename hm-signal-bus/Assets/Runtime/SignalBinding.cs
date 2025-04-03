@@ -34,13 +34,13 @@ namespace CodeCatGames.HMSignalBus.Runtime
         /// <param name="priority">Priority of the receiver.</param>
         public void Remove(Delegate receiver, int priority = 0)
         {
-            if (_receivers.ContainsKey(priority))
-            {
-                _receivers[priority].Remove(receiver);
+            if (!_receivers.TryGetValue(priority, out List<Delegate> receivers))
+                return;
+            
+            receivers.Remove(receiver);
                         
-                if (_receivers[priority].Count == 0) 
-                    _receivers.Remove(priority);
-            }
+            if (_receivers[priority].Count == 0) 
+                _receivers.Remove(priority);
         }
         
         /// <summary>
