@@ -6,7 +6,10 @@ using Cysharp.Threading.Tasks;
 
 namespace CodeCatGames.HMSignalBus.Runtime
 {
-    public sealed class SignalSubscription
+    /// <summary>
+    /// Represents a binding for signals, managing subscribers and their priorities.
+    /// </summary>
+    public sealed class SignalBinding
     {
         #region ReadonlyFields
         private readonly SortedDictionary<int, List<Delegate>> _receivers = new();
@@ -15,14 +18,27 @@ namespace CodeCatGames.HMSignalBus.Runtime
         #endregion
 
         #region Getters
-        public SignalStyle SignalStyle { get; }
+        /// <summary>
+        /// Gets the signal binding style.
+        /// </summary>
+        public SignalBindingStyle SignalBindingStyle { get; }
         #endregion
         
         #region Constructors
-        public SignalSubscription(SignalStyle signalStyle = SignalStyle.Normal) => SignalStyle = signalStyle;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SignalBinding"/> class with the specified binding style.
+        /// </summary>
+        /// <param name="signalBindingStyle">The binding style for this signal.</param>
+        public SignalBinding(SignalBindingStyle signalBindingStyle = SignalBindingStyle.Normal) =>
+            SignalBindingStyle = signalBindingStyle;
         #endregion
 
         #region Executes
+        /// <summary>
+        /// Adds a receiver for the signal with a specified priority.
+        /// </summary>
+        /// <param name="receiver">The delegate to be invoked when the signal is fired.</param>
+        /// <param name="priority">Priority of the receiver.</param>
         public void Add(Delegate receiver, int priority = 0)
         {
             switch (receiver)
@@ -47,6 +63,12 @@ namespace CodeCatGames.HMSignalBus.Runtime
                     break;
             }
         }
+        
+        /// <summary>
+        /// Removes a receiver from the signal's invocation list.
+        /// </summary>
+        /// <param name="receiver">The delegate to remove.</param>
+        /// <param name="priority">Priority of the receiver.</param>
         public void Remove(Delegate receiver, int priority = 0)
         {
             switch (receiver)
@@ -80,12 +102,22 @@ namespace CodeCatGames.HMSignalBus.Runtime
                     break;
             }
         }
+        
+        /// <summary>
+        /// Invokes all subscribers synchronously.
+        /// </summary>
+        /// <param name="signal">The signal instance.</param>
         public void Invoke(object signal)
         {
             foreach (KeyValuePair<int, List<Delegate>> receivers in _receivers.OrderByDescending(kvp => kvp.Key))
                 foreach (Delegate receiver in receivers.Value)
                     ((Action<object>)receiver)(signal);
         }
+        
+        /// <summary>
+        /// Invokes all subscribers asynchronously using tasks.
+        /// </summary>
+        /// <param name="signal">The signal instance.</param>
         public async Task InvokeAsyncTask(object signal)
         {
             List<Task> tasks = new();
@@ -97,6 +129,11 @@ namespace CodeCatGames.HMSignalBus.Runtime
 
             await Task.WhenAll(tasks);
         }
+        
+        /// <summary>
+        /// Invokes all subscribers asynchronously using UniTask.
+        /// </summary>
+        /// <param name="signal">The signal instance.</param>
         public async UniTask InvokeAsyncUniTask(object signal)
         {
             List<UniTask> tasks = new();
@@ -108,12 +145,17 @@ namespace CodeCatGames.HMSignalBus.Runtime
 
             await UniTask.WhenAll(tasks);
         }
+        
+        /// <summary>
+        /// Determines whether there are any subscribers to the signal.
+        /// </summary>
+        /// <returns>True if there are subscribers; otherwise, false.</returns>
         public bool HasReceivers() =>
-            SignalStyle switch
+            SignalBindingStyle switch
             {
-                SignalStyle.Normal => _receivers.Any(receivers => receivers.Value.Count > 0),
-                SignalStyle.Task => _taskReceivers.Any(receivers => receivers.Value.Count > 0),
-                SignalStyle.UniTask => _uniTaskReceivers.Any(receivers => receivers.Value.Count > 0),
+                SignalBindingStyle.Normal => _receivers.Any(receivers => receivers.Value.Count > 0),
+                SignalBindingStyle.Task => _taskReceivers.Any(receivers => receivers.Value.Count > 0),
+                SignalBindingStyle.UniTask => _uniTaskReceivers.Any(receivers => receivers.Value.Count > 0),
                 _ => false
             };
         #endregion

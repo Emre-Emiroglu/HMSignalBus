@@ -1,6 +1,6 @@
 ﻿namespace CodeCatGames.HMSignalBus.Runtime
 {
-    public enum SignalStyle
+    public enum SignalBindingStyle
     {
         Normal,
         Task,
