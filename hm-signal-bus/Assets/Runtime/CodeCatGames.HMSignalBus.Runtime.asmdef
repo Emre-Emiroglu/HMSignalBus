@@ -1,12 +1,10 @@
 {
-    "name": "CodeCatGames.HSignalBus.Editor",
-    "rootNamespace": "CodeCatGames.HSignalBus.Editor",
+    "name": "CodeCatGames.HMSignalBus.Runtime",
+    "rootNamespace": "CodeCatGames.HMSignalBus.Runtime",
     "references": [
-        "GUID:3fa07eb9c2295c74b9fc77f02b4effb7"
+        "GUID:f51ebe6a0ceec4240a699833d6309b23"
     ],
-    "includePlatforms": [
-        "Editor"
-    ],
+    "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,

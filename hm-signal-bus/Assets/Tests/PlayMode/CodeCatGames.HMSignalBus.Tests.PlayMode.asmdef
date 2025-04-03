@@ -1,6 +1,6 @@
 {
-    "name": "CodeCatGames.HSignalBus.Tests.PlayMode",
-    "rootNamespace": "CodeCatGames.HSignalBus.Tests.PlayMode",
+    "name": "CodeCatGames.HMSignalBus.Tests.PlayMode",
+    "rootNamespace": "CodeCatGames.HMSignalBus.Tests.PlayMode",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"

@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace CodeCatGames.HSignalBus.Runtime
+namespace CodeCatGames.HMSignalBus.Runtime
 {
     public sealed class SignalBus
     {
@@ -14,30 +14,30 @@ namespace CodeCatGames.HSignalBus.Runtime
         #region Executes
         public void Subscribe<TSignal>(Action<TSignal> receiver, int priority = 0)
         {
-            Type type = typeof(TSignal);
+            Type signalType = typeof(TSignal);
 
-            if (!_subscriptions.TryGetValue(type, out SignalSubscription subscription))
-                ThrowNotDeclaredException(type);
+            if (!_subscriptions.TryGetValue(signalType, out SignalSubscription subscription))
+                ThrowNotDeclaredException(signalType);
             else
                 subscription.Add(receiver, priority);
         }
         public void Unsubscribe<TSignal>(Action<TSignal> receiver, int priority = 0)
         {
-            Type type = typeof(TSignal);
+            Type signalType = typeof(TSignal);
 
-            if (!_subscriptions.TryGetValue(type, out SignalSubscription subscription))
-                ThrowNotDeclaredException(type);
+            if (!_subscriptions.TryGetValue(signalType, out SignalSubscription subscription))
+                ThrowNotDeclaredException(signalType);
             else
                 subscription.Remove(receiver, priority);
         }
-        public void DeclareSignal<TSignal>(SignalType signalType = SignalType.Normal)
+        public void DeclareSignal<TSignal>(SignalStyle signalStyle = SignalStyle.Normal)
         {
-            Type type = typeof(TSignal);
+            Type signalType = typeof(TSignal);
 
-            if (_subscriptions.ContainsKey(type))
-                ThrowMultipleDeclareException(type);
+            if (_subscriptions.ContainsKey(signalType))
+                ThrowMultipleDeclareException(signalType);
             else
-                _subscriptions[type] = new SignalSubscription(signalType);
+                _subscriptions[signalType] = new SignalSubscription(signalStyle);
         }
         public async Task Fire<TSignal>(TSignal signal)
         {
@@ -51,15 +51,15 @@ namespace CodeCatGames.HSignalBus.Runtime
             {
                 try
                 {
-                    switch (subscription.SignalType)
+                    switch (subscription.SignalStyle)
                     {
-                        case SignalType.Normal:
+                        case SignalStyle.Normal:
                             subscription.Invoke(signal);
                             break;
-                        case SignalType.Task:
+                        case SignalStyle.Task:
                             await subscription.InvokeAsyncTask(signal);
                             break;
-                        case SignalType.UniTask:
+                        case SignalStyle.UniTask:
                             await subscription.InvokeAsyncUniTask(signal);
                             break;
                         default:

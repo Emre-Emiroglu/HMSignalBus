@@ -4,22 +4,22 @@ using System.Linq;
 using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 
-namespace CodeCatGames.HSignalBus.Runtime
+namespace CodeCatGames.HMSignalBus.Runtime
 {
     public sealed class SignalSubscription
     {
         #region ReadonlyFields
         private readonly SortedDictionary<int, List<Delegate>> _receivers = new();
-        private readonly SortedDictionary<int, List<Func<object, Task>>> _asyncTaskReceivers = new();
-        private readonly SortedDictionary<int, List<Func<object, UniTask>>> _asyncUniTaskReceivers = new();
+        private readonly SortedDictionary<int, List<Func<object, Task>>> _taskReceivers = new();
+        private readonly SortedDictionary<int, List<Func<object, UniTask>>> _uniTaskReceivers = new();
         #endregion
 
         #region Getters
-        public SignalType SignalType { get; }
+        public SignalStyle SignalStyle { get; }
         #endregion
         
         #region Constructors
-        public SignalSubscription(SignalType signalType = SignalType.Normal) => SignalType = signalType;
+        public SignalSubscription(SignalStyle signalStyle = SignalStyle.Normal) => SignalStyle = signalStyle;
         #endregion
 
         #region Executes
@@ -27,17 +27,17 @@ namespace CodeCatGames.HSignalBus.Runtime
         {
             switch (receiver)
             {
-                case Func<object, Task> asyncTaskReceiver:
-                    if (!_asyncTaskReceivers.ContainsKey(priority))
-                        _asyncTaskReceivers[priority] = new List<Func<object, Task>>();
+                case Func<object, Task> taskReceiver:
+                    if (!_taskReceivers.ContainsKey(priority))
+                        _taskReceivers[priority] = new List<Func<object, Task>>();
                     
-                    _asyncTaskReceivers[priority].Add(asyncTaskReceiver);
+                    _taskReceivers[priority].Add(taskReceiver);
                     break;
-                case Func<object, UniTask> asyncUniTaskReceiver:
-                    if (!_asyncUniTaskReceivers.ContainsKey(priority))
-                        _asyncUniTaskReceivers[priority] = new List<Func<object, UniTask>>();
+                case Func<object, UniTask> uniTaskReceiver:
+                    if (!_uniTaskReceivers.ContainsKey(priority))
+                        _uniTaskReceivers[priority] = new List<Func<object, UniTask>>();
                     
-                    _asyncUniTaskReceivers[priority].Add(asyncUniTaskReceiver);
+                    _uniTaskReceivers[priority].Add(uniTaskReceiver);
                     break;
                 default:
                     if (!_receivers.ContainsKey(priority))
@@ -51,22 +51,22 @@ namespace CodeCatGames.HSignalBus.Runtime
         {
             switch (receiver)
             {
-                case Func<object, Task> asyncTaskReceiver:
-                    if (_asyncTaskReceivers.ContainsKey(priority))
+                case Func<object, Task> taskReceiver:
+                    if (_taskReceivers.ContainsKey(priority))
                     {
-                        _asyncTaskReceivers[priority].Remove(asyncTaskReceiver);
+                        _taskReceivers[priority].Remove(taskReceiver);
                         
-                        if (_asyncTaskReceivers[priority].Count == 0) 
-                            _asyncTaskReceivers.Remove(priority);
+                        if (_taskReceivers[priority].Count == 0) 
+                            _taskReceivers.Remove(priority);
                     }
                     break;
-                case Func<object, UniTask> asyncUniTaskReceiver:
-                    if (_asyncUniTaskReceivers.ContainsKey(priority))
+                case Func<object, UniTask> uniTaskReceiver:
+                    if (_uniTaskReceivers.ContainsKey(priority))
                     {
-                        _asyncUniTaskReceivers[priority].Remove(asyncUniTaskReceiver);
+                        _uniTaskReceivers[priority].Remove(uniTaskReceiver);
                         
-                        if (_asyncUniTaskReceivers[priority].Count == 0) 
-                            _asyncUniTaskReceivers.Remove(priority);
+                        if (_uniTaskReceivers[priority].Count == 0) 
+                            _uniTaskReceivers.Remove(priority);
                     }
                     break;
                 default:
@@ -82,15 +82,16 @@ namespace CodeCatGames.HSignalBus.Runtime
         }
         public void Invoke(object signal)
         {
-            foreach (KeyValuePair<int, List<Delegate>> receivers in _receivers.OrderByDescending(k => k.Key))
+            foreach (KeyValuePair<int, List<Delegate>> receivers in _receivers.OrderByDescending(kvp => kvp.Key))
                 foreach (Delegate receiver in receivers.Value)
                     ((Action<object>)receiver)(signal);
         }
         public async Task InvokeAsyncTask(object signal)
         {
             List<Task> tasks = new();
-            foreach (KeyValuePair<int, List<Func<object, Task>>> receivers in _asyncTaskReceivers.OrderByDescending(k =>
-                         k.Key))
+
+            foreach (KeyValuePair<int, List<Func<object, Task>>> receivers in _taskReceivers.OrderByDescending(kvp =>
+                         kvp.Key))
                 foreach (Func<object, Task> receiver in receivers.Value)
                     tasks.Add(receiver.Invoke(signal));
 
@@ -99,19 +100,20 @@ namespace CodeCatGames.HSignalBus.Runtime
         public async UniTask InvokeAsyncUniTask(object signal)
         {
             List<UniTask> tasks = new();
-            foreach (KeyValuePair<int, List<Func<object, UniTask>>> receivers in _asyncUniTaskReceivers
-                         .OrderByDescending(k => k.Key))
+
+            foreach (KeyValuePair<int, List<Func<object, UniTask>>> receivers in _uniTaskReceivers.OrderByDescending(
+                         kvp => kvp.Key))
                 foreach (Func<object, UniTask> receiver in receivers.Value)
                     tasks.Add(receiver.Invoke(signal));
 
             await UniTask.WhenAll(tasks);
         }
         public bool HasReceivers() =>
-            SignalType switch
+            SignalStyle switch
             {
-                SignalType.Normal => _receivers.Any(receivers => receivers.Value.Count > 0),
-                SignalType.Task => _asyncTaskReceivers.Any(receivers => receivers.Value.Count > 0),
-                SignalType.UniTask => _asyncUniTaskReceivers.Any(receivers => receivers.Value.Count > 0),
+                SignalStyle.Normal => _receivers.Any(receivers => receivers.Value.Count > 0),
+                SignalStyle.Task => _taskReceivers.Any(receivers => receivers.Value.Count > 0),
+                SignalStyle.UniTask => _uniTaskReceivers.Any(receivers => receivers.Value.Count > 0),
                 _ => false
             };
         #endregion

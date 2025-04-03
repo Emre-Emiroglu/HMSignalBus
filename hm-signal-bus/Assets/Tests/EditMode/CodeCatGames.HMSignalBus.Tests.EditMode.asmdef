@@ -1,6 +1,6 @@
 {
-    "name": "CodeCatGames.HSignalBus.Tests.EditMode",
-    "rootNamespace": "CodeCatGames.HSignalBus.Tests.EditMode",
+    "name": "CodeCatGames.HMSignalBus.Tests.EditMode",
+    "rootNamespace": "CodeCatGames.HMSignalBus.Tests.EditMode",
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"
