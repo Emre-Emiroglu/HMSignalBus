@@ -15,7 +15,7 @@ namespace CodeCatGames.HMSignalBus.Runtime
         
         #region Executes
         /// <summary>
-        /// Declares a signal for use in the SignalBus system.
+        /// Declares a signal type for use in the SignalBus system.
         /// </summary>
         /// <typeparam name="TSignal">The type of signal to declare.</typeparam>
         /// <param name="signalBindingStyle">The binding style for the signal.</param>
@@ -30,7 +30,7 @@ namespace CodeCatGames.HMSignalBus.Runtime
         }
         
         /// <summary>
-        /// Subscribes a receiver to a signal.
+        /// Subscribes a receiver to a specific signal type.
         /// </summary>
         /// <typeparam name="TSignal">The type of signal to subscribe to.</typeparam>
         /// <param name="receiver">The action to invoke when the signal is fired.</param>
@@ -46,7 +46,7 @@ namespace CodeCatGames.HMSignalBus.Runtime
         }
         
         /// <summary>
-        /// Unsubscribes a receiver from a signal.
+        /// Unsubscribes a receiver from a specific signal type.
         /// </summary>
         /// <typeparam name="TSignal">The type of signal to unsubscribe from.</typeparam>
         /// <param name="receiver">The action to remove from the signal invocation list.</param>
