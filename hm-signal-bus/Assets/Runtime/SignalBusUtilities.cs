@@ -1,5 +1,4 @@
 ﻿using System;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace CodeCatGames.HMSignalBus.Runtime
@@ -27,9 +26,7 @@ namespace CodeCatGames.HMSignalBus.Runtime
         /// Declares a signal type for use in the SignalBus system.
         /// </summary>
         /// <typeparam name="TSignal">The type of signal to declare.</typeparam>
-        /// <param name="signalBindingStyle">The binding style for the signal.</param>
-        public static void DeclareSignal<TSignal>(SignalBindingStyle signalBindingStyle = SignalBindingStyle.Normal) =>
-            _signalBus.DeclareSignal<TSignal>(signalBindingStyle);
+        public static void DeclareSignal<TSignal>() => _signalBus.DeclareSignal<TSignal>();
         
         /// <summary>
         /// Subscribes a receiver to a specific signal type.
@@ -50,11 +47,11 @@ namespace CodeCatGames.HMSignalBus.Runtime
             _signalBus.Unsubscribe(receiver, priority);
         
         /// <summary>
-        /// Fires a signal asynchronously and notifies all subscribers.
+        /// Fires a signal and notifies all subscribers.
         /// </summary>
         /// <typeparam name="TSignal">The type of signal to fire.</typeparam>
         /// <param name="signal">The signal instance to send.</param>
-        public static async UniTask Fire<TSignal>(TSignal signal) => await _signalBus.Fire(signal);
+        public static void Fire<TSignal>(TSignal signal) => _signalBus.Fire(signal);
         
         /// <summary>
         /// Throws an exception when a signal is declared multiple times.
@@ -77,14 +74,6 @@ namespace CodeCatGames.HMSignalBus.Runtime
         /// <param name="signalType">The type of signal that has no subscribers.</param>
         public static void LogNoSubscriberWarning(Type signalType) =>
             Debug.LogWarning($"No subscribers for signal '{signalType.Name}'.");
-        
-        /// <summary>
-        /// Throws an exception when an error occurs while firing a signal.
-        /// </summary>
-        /// <param name="signalType">The type of signal that caused the error.</param>
-        /// <param name="exception">The exception that was thrown.</param>
-        public static void ThrowFireErrorException(Type signalType, Exception exception) =>
-            throw new Exception($"Error while firing signal '{signalType.Name}': {exception.Message}");
         #endregion
     }
 }

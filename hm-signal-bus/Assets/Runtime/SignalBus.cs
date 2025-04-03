@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using Cysharp.Threading.Tasks;
 
 namespace CodeCatGames.HMSignalBus.Runtime
 {
@@ -18,15 +17,14 @@ namespace CodeCatGames.HMSignalBus.Runtime
         /// Declares a signal type for use in the SignalBus system.
         /// </summary>
         /// <typeparam name="TSignal">The type of signal to declare.</typeparam>
-        /// <param name="signalBindingStyle">The binding style for the signal.</param>
-        public void DeclareSignal<TSignal>(SignalBindingStyle signalBindingStyle = SignalBindingStyle.Normal)
+        public void DeclareSignal<TSignal>()
         {
             Type signalType = typeof(TSignal);
 
             if (_bindings.ContainsKey(signalType))
                 SignalBusUtilities.ThrowMultipleDeclareException(signalType);
             else
-                _bindings[signalType] = new SignalBinding(signalBindingStyle);
+                _bindings[signalType] = new SignalBinding();
         }
         
         /// <summary>
@@ -62,11 +60,11 @@ namespace CodeCatGames.HMSignalBus.Runtime
         }
         
         /// <summary>
-        /// Fires a signal asynchronously and notifies all subscribers.
+        /// Fires a signal and notifies all subscribers.
         /// </summary>
         /// <typeparam name="TSignal">The type of signal to fire.</typeparam>
         /// <param name="signal">The signal instance to send.</param>
-        public async UniTask Fire<TSignal>(TSignal signal)
+        public void Fire<TSignal>(TSignal signal)
         {
             Type signalType = typeof(TSignal);
 
@@ -75,30 +73,7 @@ namespace CodeCatGames.HMSignalBus.Runtime
             else if (!binding.HasReceivers())
                 SignalBusUtilities.LogNoSubscriberWarning(signalType);
             else
-            {
-                try
-                {
-                    switch (binding.SignalBindingStyle)
-                    {
-                        case SignalBindingStyle.Normal:
-                            binding.Invoke(signal);
-                            break;
-                        case SignalBindingStyle.Task:
-                            await binding.InvokeAsyncTask(signal);
-                            break;
-                        case SignalBindingStyle.UniTask:
-                            await binding.InvokeAsyncUniTask(signal);
-                            break;
-                        default:
-                            binding.Invoke(signal);
-                            break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    SignalBusUtilities.ThrowFireErrorException(signalType, ex);
-                }
-            }
+                binding.Invoke(signal);
         }
         #endregion
     }
