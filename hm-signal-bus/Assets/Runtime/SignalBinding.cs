@@ -47,11 +47,11 @@ namespace CodeCatGames.HMSignalBus.Runtime
         /// Invokes all subscribers synchronously.
         /// </summary>
         /// <param name="signal">The signal instance.</param>
-        public void Invoke(object signal)
+        public void Invoke<TSignal>(TSignal signal)
         {
             foreach (KeyValuePair<int, List<Delegate>> receivers in _receivers.OrderByDescending(kvp => kvp.Key))
                 foreach (Delegate receiver in receivers.Value)
-                   receiver.DynamicInvoke(signal);
+                   ((Action<TSignal>)receiver).Invoke(signal);
         }
 
         /// <summary>
