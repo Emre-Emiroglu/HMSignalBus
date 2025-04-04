@@ -4,7 +4,7 @@ using System.Collections.Concurrent;
 namespace CodeCatGames.HMSignalBus.Runtime
 {
     /// <summary>
-    /// Manages signal declarations, subscriptions, and firing within the SignalBus system.
+    /// Manages signal declarations, subscriptions, and firing within the SignalBus.
     /// </summary>
     public sealed class SignalBus
     {
@@ -14,7 +14,7 @@ namespace CodeCatGames.HMSignalBus.Runtime
         
         #region Executes
         /// <summary>
-        /// Declares a signal type for use in the SignalBus system.
+        /// Declares a signal type for use in the SignalBus.
         /// </summary>
         /// <typeparam name="TSignal">The type of signal to declare.</typeparam>
         public void DeclareSignal<TSignal>()

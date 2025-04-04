@@ -4,7 +4,7 @@ using UnityEngine;
 namespace CodeCatGames.HMSignalBus.Runtime
 {
     /// <summary>
-    /// Provides utility methods for managing the SignalBus system.
+    /// Provides utility methods for managing the SignalBus.
     /// Handles initialization and common operations related to signals.
     /// </summary>
     public static class SignalBusUtilities
@@ -15,7 +15,7 @@ namespace CodeCatGames.HMSignalBus.Runtime
         
         #region Core
         /// <summary>
-        /// Initializes the SignalBus system before the scene loads.
+        /// Initializes the SignalBus before the scene loads.
         /// </summary>
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Initialize() => _signalBus = new SignalBus();
@@ -23,7 +23,7 @@ namespace CodeCatGames.HMSignalBus.Runtime
 
         #region Executes
         /// <summary>
-        /// Declares a signal type for use in the SignalBus system.
+        /// Declares a signal type for use in the SignalBus.
         /// </summary>
         /// <typeparam name="TSignal">The type of signal to declare.</typeparam>
         public static void DeclareSignal<TSignal>() => _signalBus.DeclareSignal<TSignal>();
