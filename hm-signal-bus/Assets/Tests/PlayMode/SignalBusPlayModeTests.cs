@@ -51,6 +51,27 @@ namespace CodeCatGames.HMSignalBus.Tests.PlayMode
         }
         
         [UnityTest]
+        public IEnumerator Fire_Signal_WithPriority_ShouldInvokeSubscribersInPriorityOrder()
+        {
+            int[] callOrder = new int[3];
+            int timestamp = 0;
+            
+            _signalBus.DeclareSignal<TestSignal>();
+            
+            _signalBus.Subscribe<TestSignal>(receiver => callOrder[0] = timestamp++, priority: 0);
+            _signalBus.Subscribe<TestSignal>(receiver => callOrder[1] = timestamp++, priority: 1);
+            _signalBus.Subscribe<TestSignal>(receiver => callOrder[2] = timestamp++, priority: 2);
+        
+            _signalBus.Fire(new TestSignal(42));
+
+            yield return null;
+            
+            Assert.AreEqual(0, callOrder[2]);
+            Assert.AreEqual(1, callOrder[1]);
+            Assert.AreEqual(2, callOrder[0]);
+        }
+        
+        [UnityTest]
         public IEnumerator Fire_Signal_WithoutSubscribers_ShouldNotCauseError()
         {
             _signalBus.DeclareSignal<TestSignal>();
