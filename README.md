@@ -19,6 +19,10 @@ SignalBinding is responsible for managing the subscription and invocation of sig
 * HasReceivers: Checks whether the signal has any active subscribers.
 
 ## Getting Started
+Install via UPM with git URL
+
+` https://github.com/Emre-Emiroglu/HMSignalBus.git`
+
 Clone the repository
 ```bash
   git clone https://github.com/Emre-Emiroglu/HMSignalBus.git
