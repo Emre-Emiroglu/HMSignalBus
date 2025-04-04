@@ -58,9 +58,9 @@ namespace CodeCatGames.HMSignalBus.Tests.PlayMode
             
             _signalBus.DeclareSignal<TestSignal>();
             
-            _signalBus.Subscribe<TestSignal>(receiver => callOrder[0] = timestamp++, priority: 0);
-            _signalBus.Subscribe<TestSignal>(receiver => callOrder[1] = timestamp++, priority: 1);
-            _signalBus.Subscribe<TestSignal>(receiver => callOrder[2] = timestamp++, priority: 2);
+            _signalBus.Subscribe<TestSignal>(_ => callOrder[0] = timestamp++, priority: 0);
+            _signalBus.Subscribe<TestSignal>(_ => callOrder[1] = timestamp++, priority: 1);
+            _signalBus.Subscribe<TestSignal>(_ => callOrder[2] = timestamp++, priority: 2);
         
             _signalBus.Fire(new TestSignal(42));
 
