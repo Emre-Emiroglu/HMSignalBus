@@ -12,7 +12,7 @@ SignalBusUtilities is a static helper class designed to centrally manage the cor
 * Construct the SignalBus: It holds a SignalBus field and is responsible for ensuring the proper construction of SignalBus. SignalBus needs to be constructed before the classes or components that will use it. This requirement is addressed in the Initialize() method of SignalBusUtilities, which is marked with the `[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]` attribute. This ensures that SignalBus is automatically constructed before the scene loads.
 * Centrally manage the core functions of the SignalBus: Classes and components that wish to utilize SignalBus methods can simply call the methods of SignalBusUtilities, which are named the same as the SignalBus methods . This provides a convenient and efficient way to use the SignalBus.
 
-SignalBinding is responsible for managing the subscription and invocation of signals. It is used internally by SignalBus, It allows prioritizing subscribers and ensures that signals are delivered in the correct order.
+SignalBinding is responsible for managing the subscription and invocation of signals. It is used internally by SignalBus. It allows prioritizing subscribers and ensures that signals are delivered in the correct order.
 * Add: Adds a receiver for the signal with a specified priority.
 * Remove: Removes a receiver from the signal's invocation list. If the receiver has been subscribed with a priority, the same priority must be used when removing it.
 * Invoke: Calls all subscribed methods in order of priority when a signal is fired.
