@@ -21,7 +21,7 @@ SignalBinding is responsible for managing the subscription and invocation of sig
 ## Getting Started
 Install via UPM with git URL
 
-` https://github.com/Emre-Emiroglu/HMSignalBus.git`
+`https://github.com/Emre-Emiroglu/HMSignalBus.git`
 
 Clone the repository
 ```bash
