@@ -15,9 +15,8 @@ namespace CodeCatGames.HMSignalBus.Runtime
         
         #region Core
         /// <summary>
-        /// Initializes the SignalBus before the scene loads.
+        /// Initializes the SignalBus.
         /// </summary>
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         public static void Initialize() => _signalBus = new SignalBus();
         #endregion
 

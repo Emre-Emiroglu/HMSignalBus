@@ -11,6 +11,15 @@ namespace CodeCatGames.HMSignalBus.Runtime
         #region ReadonlyFields
         private readonly ConcurrentDictionary<Type, SignalBinding> _bindings = new();
         #endregion
+
+        #region Getters
+        /// <summary>
+        /// Checks whether a specific signal type has been declared in the SignalBus.
+        /// </summary>
+        /// <typeparam name="TSignal">The type of signal to check for declaration.</typeparam>
+        /// <returns>True if the signal type has been declared; otherwise, false.</returns>
+        public bool HasDeclared<TSignal>() => _bindings.ContainsKey(typeof(TSignal));
+        #endregion
         
         #region Executes
         /// <summary>
@@ -21,7 +30,7 @@ namespace CodeCatGames.HMSignalBus.Runtime
         {
             Type signalType = typeof(TSignal);
 
-            if (_bindings.ContainsKey(signalType))
+            if (HasDeclared<TSignal>())
                 SignalBusUtilities.ThrowMultipleDeclareException(signalType);
             else
                 _bindings[signalType] = new SignalBinding();
