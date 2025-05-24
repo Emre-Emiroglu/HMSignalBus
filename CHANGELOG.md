@@ -1,10 +1,10 @@
-﻿## [1.0.1] - 2025-05-18
+﻿## [1.0.2] - 2025-05-25
 
 ### Added
-- Added `HasDeclared<TSignal>()` method to `SignalBus` class to check if a signal type is already declared.
+- N/A
 
 ### Changed
-- Removed `[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]` attribute from `SignalBusUtilities.Initialize()` method.
+- Changed `package.json` author name.
 
 ### Fixed
 - N/A
