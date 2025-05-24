@@ -4,7 +4,7 @@
   "displayName": "HMSignalBus",
   "description": "HMSignalBus is an event-driven and pub-sub pattern based package that provides loosely coupled communication between classes and components via signals.",
   "author": {
-    "name": "Emre Emiroglu",
+    "name": "Code Cat Games",
     "email": "emirogluemre08@gmail.com",
     "url": "https://github.com/Emre-Emiroglu"
   },
