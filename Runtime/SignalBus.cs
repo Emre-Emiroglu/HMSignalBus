@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 
-namespace CodeCatGames.HMSignalBus.Runtime
+namespace HMSignalBus.Runtime
 {
     /// <summary>
     /// Manages signal declarations, subscriptions, and firing within the SignalBus.

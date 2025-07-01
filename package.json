@@ -1,10 +1,11 @@
 {
-  "name": "com.codecatgames.hmsignalbus",
-  "version": "1.0.2",
+  "name": "com.emreemiroglu.hmsignalbus",
+  "version": "1.0.0",
   "displayName": "HMSignalBus",
   "description": "HMSignalBus is an event-driven and pub-sub pattern based package that provides loosely coupled communication between classes and components via signals.",
+  "icon": "icon.png",
   "author": {
-    "name": "Code Cat Games",
+    "name": "Emre Emiroglu",
     "email": "emirogluemre08@gmail.com",
     "url": "https://github.com/Emre-Emiroglu"
   },

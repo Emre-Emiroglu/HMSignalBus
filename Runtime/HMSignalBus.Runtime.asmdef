@@ -1,6 +1,6 @@
 {
-    "name": "CodeCatGames.HMSignalBus.Runtime",
-    "rootNamespace": "CodeCatGames.HMSignalBus.Runtime",
+    "name": "HMSignalBus.Runtime",
+    "rootNamespace": "HMSignalBus.Runtime",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],

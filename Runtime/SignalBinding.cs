@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CodeCatGames.HMSignalBus.Runtime
+namespace HMSignalBus.Runtime
 {
     /// <summary>
     /// Represents a binding for signals, managing subscribers and their priorities.

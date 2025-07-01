@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace CodeCatGames.HMSignalBus.Runtime
+namespace HMSignalBus.Runtime
 {
     /// <summary>
     /// Provides utility methods for managing the SignalBus.

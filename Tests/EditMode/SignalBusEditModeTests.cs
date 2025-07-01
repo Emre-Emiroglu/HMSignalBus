@@ -1,8 +1,8 @@
 ﻿using System;
-using CodeCatGames.HMSignalBus.Runtime;
+using HMSignalBus.Runtime;
 using NUnit.Framework;
 
-namespace CodeCatGames.HMSignalBus.Tests.EditMode
+namespace HMSignalBus.Tests.EditMode
 {
     public sealed class SignalBusEditModeTests
     {

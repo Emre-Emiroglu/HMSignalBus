@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
-using CodeCatGames.HMSignalBus.Runtime;
+using HMSignalBus.Runtime;
 using NUnit.Framework;
 using UnityEngine.TestTools;
 
-namespace CodeCatGames.HMSignalBus.Tests.PlayMode
+namespace HMSignalBus.Tests.PlayMode
 {
     public sealed class SignalBusPlayModeTests
     {

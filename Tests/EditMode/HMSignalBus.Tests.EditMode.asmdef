@@ -1,12 +1,14 @@
 {
-    "name": "CodeCatGames.HMSignalBus.Tests.PlayMode",
-    "rootNamespace": "CodeCatGames.HMSignalBus.Tests.PlayMode",
+    "name": "HMSignalBus.Tests.EditMode",
+    "rootNamespace": "HMSignalBus.Tests.EditMode",
     "references": [
         "GUID:27619889b8ba8c24980f49ee34dbb44a",
         "GUID:0acc523941302664db1f4e527237feb3",
         "GUID:067ce487f2d5cc240b22c8dadbb21c4d"
     ],
-    "includePlatforms": [],
+    "includePlatforms": [
+        "Editor"
+    ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": true,

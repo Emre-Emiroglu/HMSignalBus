@@ -1,3 +1,5 @@
+<img src="icon.jpg" width="128" height="128" alt="HMSignalBus Logo">
+
 # HMSignalBus
 HMSignalBus is an event-driven package based on the pub-sub pattern that ensures loosely coupled communication between classes and components. When a signal is fired, all classes and components that subscribe to this signal are notified. In this way, it provides loose coupling between classes and components and provides a more flexible and sustainable architecture.
 
