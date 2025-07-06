@@ -1,7 +1,5 @@
 ﻿## [1.0.0] - 2025-07-06
 
-First release of HMSignalBus, an event-driven communication system for Unity.
-
 ### Added
 - Core SignalBus implementation for event-driven communication.
 - Pub-Sub pattern based signal system.
