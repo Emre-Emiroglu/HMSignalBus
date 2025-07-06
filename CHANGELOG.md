@@ -1,4 +1,4 @@
-﻿## [1.0.0] - 2025-07-01
+﻿## [1.0.0] - 2025-07-06
 
 First release of HMSignalBus, an event-driven communication system for Unity.
 
